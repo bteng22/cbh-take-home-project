@@ -1,8 +1,10 @@
 const crypto = require("crypto");
+const {
+  TRIVIAL_PARTITION_KEY,
+  MAX_PARTITION_KEY_LENGTH,
+} = require("./constants");
 
-exports.deterministicPartitionKey = (event) => {
-  const TRIVIAL_PARTITION_KEY = "0";
-  const MAX_PARTITION_KEY_LENGTH = 256;
+const deterministicPartitionKey = (event) => {
   let candidate;
 
   if (event) {
@@ -26,3 +28,7 @@ exports.deterministicPartitionKey = (event) => {
   }
   return candidate;
 };
+
+module.exports = {
+  deterministicPartitionKey,
+}

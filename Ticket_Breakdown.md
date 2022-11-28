@@ -56,3 +56,56 @@ You will be graded on the level of detail in each ticket, the clarity of the exe
      `Failed to update Agent ${Agent.name}. Custom ID ${customID} already exists.`  
      `Failed to update Agent ${Agent.name}. Custom ID ${customID} is invalid.`
    - Frontend validation should require a custom ID and adhere to validation constraints above when inputting an Agent for Shift.
+
+### CORE-200
+
+2. As a Facility client, I want to be able to generate shift reports with our agents' custom IDs, so that agents are easily identifiable during compliance checks.
+
+   BlockedBy: [CORE-100]
+
+   Estimation: 3
+
+   Context: Once Agents have custom IDs per Facility, we want to give our clients the ability to generate shift reports that list their Agents custom Ids for the shifts over a quarterly timeframe. This will allow compliance checks to easily cross-reference the Agents that worked for the Facility.
+
+   Acceptance Criteria:
+
+   - Given a Facility client,  
+     When they download shift data for the facility,  
+     Then the client should be able to identify each Agent by the custom Ids
+
+   - Given a Facility client,  
+     When they generate a quarterly Shift report from the shift data  
+     Then the Agents on the reports should show their custom IDs
+
+   - Verify internal database IDs are no longer visible in reports
+   - Verify PDF for `generateReports` reflects [PDF mock up]
+   - Frontend changes should reflect [Design mock ups here].
+   - Example fake JSON responses for both `getShiftsByFacility` and `generateReports`...
+
+   ```
+    #getShiftsByFacility
+    {
+      shifts: [
+        agent: {
+          id: "CUSTOM_ID"
+        }
+      ],
+      ...
+    }
+   ```
+
+   ```
+    #generateReports
+    {
+      shifts: [
+        agent: {
+          id: "CUSTOM_ID"
+        }
+      ],
+      ...
+    }
+   ```
+
+   Implementation Details:
+
+   - Assuming `getShiftsByFacility` and `generateReports` are built on the backend, the intention of this ticket is to expose the custom ID to our Facility client through these methods/endpoints. Luckily, since we assumed the custom IDs are required and were backfilled through the migration, all Agents should have a custom ID going forward after CORE-100. Assuming the existing methods were returning an `id` for the Agent we could swap that internal database ID with the custom ID now. This change should stabilize the contract between the consumers of these APIs and ideally avoid any breaking changes. All reports going forward should refer to Agents by their custom ID.

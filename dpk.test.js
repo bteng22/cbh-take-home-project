@@ -51,7 +51,7 @@ describe("deterministicPartitionKey", () => {
     expect(partitionKey).toBe('{"not-a-string":true}');
   });
 
-  it("returns a hex hash digest using SHA3-512 algorithm", () => {
+  it("returns a hex hash digest using SHA3-512 algorithm from stringified content", () => {
     deterministicPartitionKey("foo");
 
     expect(cryptoMock).toBeCalledWith("sha3-512");
